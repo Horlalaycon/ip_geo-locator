@@ -14,9 +14,9 @@ banner = r"""
 |-|---------------------------------------------------------------|-| 
 (~|  Geographical location/address finder using ip address        |~)
 |-|---------------------------------------------------------------|-|
-|~)     Created by: Ibrahim-Ajimati                               (~|
+|~)    Developed by: sys_br3ach3r                                 (~|
 |-|---------------------------------------------------------------|-|
-[~|                 A.K.A f3ar_0f_th3_unkn0wn @github             |~]
+[~|                 A.K.A @Horlalaycon @github                    |~]
 ---------------------------------------------------------------------
                             +---------+         -----
                            +-----------+        |   |
@@ -24,6 +24,7 @@ banner = r"""
 =====================================================================
 =====================================================================                
 """
+
 # arguments
 parser = argparse.ArgumentParser(prog="IP Geolocate", description="A program to get geographical location/find location information from an ip address ")
 parser.add_argument("-t", "--target", help="specify IP address to geo-locate", required=True)
@@ -61,8 +62,8 @@ def locate():
 +++++++++++++++++++++++++++++++++++++++++++++++++""")
 
 
-print(banner)
 if __name__ == "__main__":
+    print(banner)
     try:
         print(f"++++++++++++++++++++++++++++++++++\n Locating target: {target}")
         print(locate())
