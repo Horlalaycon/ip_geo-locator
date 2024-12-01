@@ -5,7 +5,9 @@
 - <b>Do not use</b> this  <b>program</b> for <b>illegal activities</b>, <u><b>Educational Purposes only</b></u>
 
 ## usage
-- ```python3 ipgeolocate.py -t ip_address -m target_address_map```
+- ```python3 ipgeolocate.py -ip ip_address -m target_address_map```
+- ```python3 ipgeolocate.py -d example.com```
+- Use -m/--mmap option to generate Map
 - use -h or --help for help menu ```python3 ipgeolocate.py --help```
 
 ## Installation
