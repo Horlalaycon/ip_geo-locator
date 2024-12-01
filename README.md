@@ -7,7 +7,7 @@
 ## usage
 - ```python3 ipgeolocate.py -ip ip_address -m target_address_map```
 - ```python3 ipgeolocate.py -d example.com```
-- Use -m/--mmap option to generate Map
+- Use -m/--map option to generate Map
 - use -h or --help for help menu ```python3 ipgeolocate.py --help```
 
 ## Installation
