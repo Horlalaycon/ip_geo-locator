@@ -102,12 +102,13 @@ if __name__ == "__main__":
 			save_map.save(map_name)
 
 	except TypeError:
+		print("========================================")
 		print(f"Error, check network connectivity")
-
+		print("========================================")
 
 	except KeyboardInterrupt:
 		print(f"""
-----------------------------------
-|| program Aborting... (Ctrl+c) ||
-----------------------------------""")
+========================================
+  program Aborting... (Ctrl+c) 
+========================================""")
 		quit()
