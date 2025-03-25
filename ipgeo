@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+
+import geocoder
+import reverse_geocoder as rg
+import folium
+import argparse
+import socket
+import time
+import re
+from colorama import init, Fore, Back, Style
+
+# initialize colorama
+init()
+
+# domain name option processing
+def convert_domain_name(domain):
+	try:
+		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		sock.settimeout(1)
+		ip = socket.gethostbyname(domain)
+		pattern= r"(\d+\.\d+\.\d+\.\d+)"
+		match = re.search(pattern, ip)
+		match_result = match.group(1)
+		return match_result
+
+	except socket.gaierror as e:
+		print(Fore.RED + f" Error: Incorrect domain name, ({e})")
+		quit()
+
+
+# arguments
+parser = argparse.ArgumentParser(description="A program to get geographical location/find location information from an ip address ")
+
+# One of the two options must be selected
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-ip", "--ip_addr", help="specify Target's IP address to geolocate", )
+group.add_argument("-d", "--domain", help="Specify Target's Domain name to geolocate")
+
+parser.add_argument("-m", "--map", help="specify map name to generate location map ")
+args = parser.parse_args()
+
+# Target
+if args.domain:
+	target = convert_domain_name(args.domain)
+else:
+	target = args.ip_addr
+
+
+def get_latlng(ip_addr=target):
+	g = geocoder.ip(ip_addr)
+	latitude, longitude = g.latlng
+	return latitude, longitude
+
+
+# geolocator engine
+def locate():
+	city = ""
+	region1 = ""
+	region2 = ""
+	country = ""
+	lat, lng = get_latlng(target)
+	ip_info = rg.search((lat, lng), verbose=False)
+	for item in ip_info:
+		city = item["name"]
+		region1 = item["admin1"]
+		region2 = item["admin2"]
+		country = item["cc"]
+
+	return str(f"""
+	City: {city}
+	State: {region1}
+	Region: {region2}
+	Country: {country}
+	Latitude: {lat}
+	Longitude: { lng}""")
+
+
+if __name__ == "__main__":
+	# banner
+	print(Fore.BLACK + Back.WHITE + f"***************(Ip Geo-locator)***************" + Style.RESET_ALL)
+	print(Fore.BLACK + Back.WHITE + f"   By Sys_br3ach3r                            " + Style.RESET_ALL)
+
+	try:
+		print(f"\r\n  Locating target: {Fore.GREEN}{target}{Style.RESET_ALL}", end="")
+		print(locate())
+
+		# map
+		if args.map:
+			map_name = args.map + ".html"
+
+			# loading symbol
+			symbols = ['..', ' ', '..', ' ', '..', ' ', '..']
+			for symbol in symbols:
+				print(f"\r    Generating Map{symbol}", end="")
+				time.sleep(0.9)
+
+			latlng = get_latlng()
+			save_map = folium.Map(location=latlng, zoom_start=15)
+			folium.CircleMarker(location=latlng, radius=100, popup="Found Location").add_to(save_map)
+			save_map.save(map_name)
+
+			print(f"""\n    Map Saved: {map_name}""")
+
+		print(f"\n{Fore.BLACK + Back.WHITE}       Program Completed.                     " + Style.RESET_ALL)
+
+	except TypeError:
+		print(f" {Fore.RED}Error:{Style.RESET_ALL} check network connectivity")
+
+	except KeyboardInterrupt:
+		abort_countdown = [5, 4, 3, 2, 1]
+		for count in abort_countdown:
+			print(f"\r ({Fore.RED}Ctrl + c{Style.RESET_ALL}) Aborting in {count}", end="")
+			time.sleep(0.5)
+		quit()

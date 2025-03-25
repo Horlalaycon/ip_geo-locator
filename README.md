@@ -5,16 +5,17 @@
 - <b>Do not use</b> this  <b>program</b> for <b>illegal activities</b>, <u><b>Educational Purposes only</b></u>
 
 ## usage
-- ```python3 ipgeolocate.py -ip ip_address -m target_address_map```
-- ```python3 ipgeolocate.py -d example.com```
+- ```python3 ipgeo.py -ip ip_address -m target_address_map```
+- ```python3 ipgeo.py -d example.com```
 - Use -m/--map option to generate Map
-- use -h or --help for help menu ```python3 ipgeolocate.py --help```
+- use -h or --help for help menu ```python3 ipgeo.py --help```
 
 ## Installation
 - ```git clone https://github.com/Horlalaycon/ip_geo-locator.git ```
 - ```cd ip_geo-locator```
 - ```pip install -r requirements ```
-- ```python3 ipgeolocate.py -t ip_address```
+- ```chmod +x ipgeo```
+- ```./ipgeo -ip ip_address```
 
 # Author
-- Program Developed by sys_br3ach3r @ GitHub https://github.com/Horlalaycon
+- Program Developed by <a href="https://github.com/Horlalaycon">sys_br3ach3r</a> @ GitHub
