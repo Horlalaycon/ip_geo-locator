@@ -4,8 +4,12 @@ import reverse_geocoder as rg
 import folium
 import argparse
 import socket
+import time
 import re
+from colorama import init, Fore, Back, Style
 
+# initialize colorama
+init()
 
 # domain name option processing
 def convert_domain_name(domain):
@@ -18,15 +22,8 @@ def convert_domain_name(domain):
 		match_result = match.group(1)
 		return match_result
 
-	except socket.gaierror:
-		print(r"""
-========================================
- Error!:
-    Incorrect domain name 
-            or
-    No internet connection
-========================================
-""")
+	except socket.gaierror as e:
+		print(Fore.RED + f" Error: Incorrect domain name, ({e})")
 		quit()
 
 
@@ -68,48 +65,49 @@ def locate():
 		region2 = item["admin2"]
 		country = item["cc"]
 
-	return str(f"""----------------------------------------
+	return str(f"""
 	City: {city}
 	State: {region1}
 	Region: {region2}
 	Country: {country}
-	Lat, Lng: {lat, lng}
-========================================
-""")
+	Latitude: {lat}
+	Longitude: { lng}""")
 
 
 if __name__ == "__main__":
 	# banner
-	print("=" * 40)
-	print("	 *****(IP GEOLOCATOR)*****")
-	print("-" * 40)
-
-	print("   By: sys_br3ach3r")
-	print("=" * 40)
+	print(Fore.BLACK + Back.WHITE + f"***************(Ip Geo-locator)***************" + Style.RESET_ALL)
+	print(Fore.BLACK + Back.WHITE + f"   By Sys_br3ach3r                            " + Style.RESET_ALL)
 
 	try:
-		print(f"\n  Locating target: {target}")
+		print(f"\r\n  Locating target: {Fore.GREEN}{target}{Style.RESET_ALL}", end="")
 		print(locate())
 
 		# map
 		if args.map:
 			map_name = args.map + ".html"
-			print(f""" Generating Map...
-	Map Saved: ({map_name})
-========================================""")
+
+			# loading symbol
+			symbols = ['..', ' ', '..', ' ', '..', ' ', '..']
+			for symbol in symbols:
+				print(f"\r    Generating Map{symbol}", end="")
+				time.sleep(0.9)
+
 			latlng = get_latlng()
-			save_map = folium.Map(location=latlng, zoom_start=10)
+			save_map = folium.Map(location=latlng, zoom_start=15)
 			folium.CircleMarker(location=latlng, radius=100, popup="Found Location").add_to(save_map)
 			save_map.save(map_name)
 
+			print(f"""\n    Map Saved: {map_name}""")
+
+		print(f"\n{Fore.BLACK + Back.WHITE}       Program Completed.                     " + Style.RESET_ALL)
+
 	except TypeError:
-		print("========================================")
-		print(f"Error, check network connectivity")
-		print("========================================")
+		print(f" {Fore.RED}Error:{Style.RESET_ALL} check network connectivity")
 
 	except KeyboardInterrupt:
-		print(f"""
-========================================
-  program Aborting... (Ctrl+c) 
-========================================""")
+		abort_countdown = [5, 4, 3, 2, 1]
+		for count in abort_countdown:
+			print(f"\r ({Fore.RED}Ctrl + c{Style.RESET_ALL}) Aborting in {count}", end="")
+			time.sleep(0.5)
 		quit()
